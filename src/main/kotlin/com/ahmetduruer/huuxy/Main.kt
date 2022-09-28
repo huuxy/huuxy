@@ -32,10 +32,10 @@ class Main : CoroutineVerticle() {
                 System.getenv("HuuxyVersion").toString()
             }
         }
-    }
 
-    private val logger by lazy {
-        LoggerFactory.getLogger("Huuxy")
+        val logger by lazy {
+            LoggerFactory.getLogger("Huuxy")
+        }
     }
 
     override suspend fun start() {
