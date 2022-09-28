@@ -36,6 +36,10 @@ dependencies {
     implementation("io.vertx:vertx-tcp-eventbus-bridge:$vertxVersion")
     implementation("io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion")
 
+    implementation(group = "org.apache.logging.log4j", name = "log4j-api", version = "2.18.0")
+    implementation(group = "org.apache.logging.log4j", name = "log4j-core", version = "2.18.0")
+    implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.18.0")
+
     /*
      * TEST dependencies
      */
