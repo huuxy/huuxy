@@ -1,10 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val vertxVersion = "4.3.3"
+val log4jVersion = "2.19.0"
 
 plugins {
     kotlin("jvm") version "1.7.10"
-    id("io.vertx.vertx-plugin") version "1.3.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
 
@@ -21,11 +22,6 @@ repositories {
     maven("https://jitpack.io")
 }
 
-vertx {
-    mainVerticle = "com.ahmetduruer.huuxy.Main"
-    vertxVersion = this@Build_gradle.vertxVersion
-}
-
 dependencies {
     /*
      * Runtime dependencies
@@ -33,12 +29,13 @@ dependencies {
 
     implementation(kotlin("stdlib-jdk8"))
 
+    implementation("io.vertx:vertx-core:$vertxVersion")
     implementation("io.vertx:vertx-tcp-eventbus-bridge:$vertxVersion")
     implementation("io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion")
 
-    implementation(group = "org.apache.logging.log4j", name = "log4j-api", version = "2.18.0")
-    implementation(group = "org.apache.logging.log4j", name = "log4j-core", version = "2.18.0")
-    implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.18.0")
+    implementation(group = "org.apache.logging.log4j", name = "log4j-api", version = log4jVersion)
+    implementation(group = "org.apache.logging.log4j", name = "log4j-core", version = log4jVersion)
+    implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = log4jVersion)
 
     /*
      * TEST dependencies
@@ -57,18 +54,6 @@ tasks {
         }
 
         dependsOn(shadowJar)
-    }
-
-    vertxDebug {
-        environment("EnvironmentType", "DEVELOPMENT")
-        environment("HuuxyVersion", fullVersion)
-        environment("HuuxyBuildType", buildType)
-    }
-
-    vertxRun {
-        environment("EnvironmentType", "DEVELOPMENT")
-        environment("HuuxyVersion", fullVersion)
-        environment("HuuxyBuildType", buildType)
     }
 
     build {
@@ -104,6 +89,11 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
+tasks.named<JavaExec>("run") {
+    environment("EnvironmentType", "DEVELOPMENT")
+    environment("HuuxyVersion", fullVersion)
+    environment("HuuxyBuildType", buildType)
+}
 
 application {
     mainClass.set("com.ahmetduruer.huuxy.Main")
